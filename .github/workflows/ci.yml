@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+  workflow_dispatch:
+    inputs:
+      app_type:
+        description: 'Application type to test'
+        required: false
+        default: 'angular'
+        type: choice
+        options:
+          - angular
+          - springboot
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      APP_TYPE: ${{ inputs.app_type || vars.APP_TYPE || 'angular' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+        env:
+          RUNNER_TOOL_CACHE: /tmp/runner-tool-cache
+
+      - name: Make test script executable
+        run: chmod +x run-tests.sh
+
+      - name: Install dependencies and run tests
+        run: ./run-tests.sh ${{ vars.APP_TYPE }}
+
+      - name: Upload test results
+        if: ${{ !vars.ACT }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results
+
+  
