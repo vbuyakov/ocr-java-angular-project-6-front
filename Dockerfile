@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 # ================================
 # Stage 1: Build Angular application
 # ================================
@@ -5,9 +7,12 @@ FROM node:24-alpine AS build
 
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Copy package files
 COPY package*.json ./
-RUN npm ci
+
+# Install dependencies with cache mount (persists between builds)
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
 
 # Copy source code and build
 COPY . .
