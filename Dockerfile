@@ -25,8 +25,8 @@ FROM nginx:alpine
 
 ARG APP_NAME=olympic-games-starter
 
-COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/dist/${APP_NAME}/browser/ /usr/share/nginx/html/
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /app/dist/${APP_NAME}/browser/ /app/
 
 EXPOSE 80
 

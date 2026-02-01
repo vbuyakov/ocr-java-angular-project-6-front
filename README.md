@@ -16,6 +16,18 @@ Summary:
 
 ## Getting Started
 
+### Environment
+
+Create a `.env` file in the project root (e.g. copy from `.env.example`) to configure local and Docker runs:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` if needed. Example variables:
+
+- **APP_PORT** – Host port for the app when running in Docker (default: `80`). Example: `8080` to access at `http://localhost:8080`.
+
 ### Install dependencies
 
 Run `npm i` in local development to install NodeJS dependencies. If you are installing the app on a CI environment prefer to use `npm ci`. you can also change npm cache directory to your working directory as following
@@ -26,7 +38,23 @@ npm ci --cache .npm --prefer-offline
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Local dev (Angular dev server)
+
+Run `ng serve` (or `npm start`) for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
+```bash
+npm start
+```
+
+### Dev mode with Docker
+
+To run the app in a container (built from the project Dockerfile) with hot-reload–friendly setup, use the dev Compose file. Ensure you have a `.env` file (see [Environment](#environment)); `APP_PORT` sets the host port (default `80`).
+
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
+
+Then open `http://localhost:<APP_PORT>/` (e.g. `http://localhost:80/` or `http://localhost:8080/` if `APP_PORT=8080`).
 
 ### Build
 
