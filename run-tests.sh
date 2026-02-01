@@ -36,8 +36,17 @@ run_angular_tests() {
 
 # --- Spring Boot: placeholder for future implementation ---
 run_spring_boot_tests() {
-  echo "[run-tests] Spring Boot tests are not implemented yet."
-  return 1
+  cd "${PROJECT_ROOT}"
+  echo "[run-tests] Running Spring Boot tests..."
+  if ! ./gradlew test; then
+    return 1
+  fi
+  if [ -d "${PROJECT_ROOT}/build/test-results/test" ]; then
+    cp -R "${PROJECT_ROOT}/build/test-results/test/." "${RESULTS_DIR}/"
+  else
+    echo "[run-tests] Warning: Gradle test results not found at build/test-results/test"
+  fi
+  return 0
 }
 
 # --- Main ---
@@ -57,7 +66,7 @@ main() {
     springboot)
       clean_test_artifacts
       if run_spring_boot_tests; then
-        echo "[run-tests] Spring Boot tests passed."
+        echo "[run-tests] Spring Boot tests passed. JUnit report in ${RESULTS_DIR}/"
         exit 0
       fi
       echo "[run-tests] Spring Boot tests failed or not implemented."

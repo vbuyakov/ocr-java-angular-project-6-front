@@ -58,7 +58,32 @@ To deploy application on nginx web server with docker you can use nginx config l
 
 After building the app copy the `dist/olympic-games-starter` folder to the root application folder in the docker image.
 
-### Publishing to GitLab Registry
+## GitHub Actions: Variables & Secrets
+
+If you run CI in GitHub Actions, add the following repository entries:
+
+### Repository Variables
+
+- APP_TYPE: `angular`
+
+### Repository Secrets
+
+- DOCKERHUB_USERNAME: Docker Hub username
+- DOCKERHUB_TOKEN: Docker Hub access token
+
+
+## Semantic Release
+
+Releases are automated with semantic-release using Conventional Commits on the `main` branch, per `release.config.js`.
+
+- `feat:` → minor release
+- `fix:` or `perf:` → patch release
+- `feat!:` or `BREAKING CHANGE:` → major release
+- `docs:`, `chore:`, `style:`, etc. → no release
+
+Release notes are generated and published to GitHub via the semantic-release GitHub plugin.
+
+## Publishing to GitLab Registry
 
 To publish the application to a GitLab registry, follow these steps:
 
